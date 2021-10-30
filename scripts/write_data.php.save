@@ -1,0 +1,104 @@
+<?php 
+
+class esp8266{
+
+ public $link='';
+
+ // il maquait le paramètre idmachine dans ton constructeur
+
+ function __construct($NbFlash,$idMachine){
+
+  $this->connect();
+
+  $this->storeInDB($NbFlash,$idMachine);
+
+  // Les deux requetes sont regoupées en une avec 2 paramètres
+
+
+
+  //$this->storedInDB($idMachine);
+
+  //echo "test";
+
+ }
+
+
+
+ function connect(){
+
+  $this->link = mysqli_connect('localhost','root','willy9105') or die('Cannot connect to the DB');
+
+
+  //pour mes essais j'ai utilisé une base appeleé biomed -> a modifier en fct de ta base
+
+  mysqli_select_db($this->link,'test2') or die('Cannot select the DB');
+
+ }
+
+
+
+ function storeInDB($NbFlash,$idMachine){
+
+  if ($_GET['NbFlash'] != ''){
+
+  //Mise a jour du nb flashs de la machine idmachine
+
+  $query1 = "SELECT NbFlash FROM Prestation WHERE NomMachine=".$idMachine;
+
+  $NbFlashBdd = mysqli_query($this->link,$query1) or die('Errant query1: '.$query1);
+
+  $NbFlashResult = mysqli_fetch_assoc($NbFlashBdd);
+
+  echo'<pre>';
+  echo'</pre>';
+  echo '</pre>';
+  echo $NbFlashResult['NomMachine'];
+
+  printf("%s (%s) \n", $NbFlashResult);
+
+//  $NbFlash = $NbFlashResult + 1;
+
+  $query="SELECT CASE MONTH(CURDATE()) 
+               WHEN 1 THEN UPDATE date INNER JOIN Prestation SET date.Janvier=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 2 THEN UPDATE date INNER JOIN Prestation SET date.Fevrier=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1         
+               WHEN 3 THEN UPDATE date INNER JOIN Prestation SET date.Mars=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 4 THEN UPDATE date INNER JOIN Prestation SET date.Avril=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 5 THEN UPDATE date INNER JOIN Prestation SET date.Mai=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 6 THEN UPDATE date INNER JOIN Prestation SET date.Juin=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 7 THEN UPDATE date INNER JOIN Prestation SET date.Juilliet=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 8 THEN UPDATE date INNER JOIN Prestation SET date.Aout=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 9 THEN UPDATE date INNER JOIN Prestation SET date.Septembre=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 10 THEN UPDATE date INNER JOIN Prestation SET date.Octobre=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 11 THEN UPDATE date INNER JOIN Prestation SET date.Novembre=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 12 THEN UPDATE date INNER JOIN Prestation SET date.Decembre=Prestation.NbFlash+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1
+               WHEN 1=1 THEN UPDATE Prestation set NbFlash=NbFlash+".$NbFlash." WHERE NomMachine=".$idMachine." AND EtatMachine=1
+               END";
+
+  //$query = "update Prestation set NbFlash=NbFlash+".$NbFlash." WHERE NomMachine=".$idMachine." AND EtatMachine=1";
+
+  $result = mysqli_query($this->link,$query) or die('Errant query:  '.$query);
+
+//  printf("%s (%s) \n", $NbFlash); }
+ }
+
+//  function storedInDB($idMachine){
+
+//  $query2="insert into Prestation set idMachine=3";
+
+//  $result2=mysqli_query($this->link,$query2) or die('Errant query2: '.$query2);
+
+
+
+//}
+}
+}
+
+if($_GET['NbFlash'] != ''){
+
+ $esp8266obj=new esp8266($_GET['NbFlash'],$_GET['NomMachine']);
+
+}
+
+
+
+?>

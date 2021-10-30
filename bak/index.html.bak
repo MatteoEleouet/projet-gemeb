@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>PAGE D'INSCRIPTION</title>
+	<meta charset="utf-8">
+    </head>
+    <body>
+        <form action="insert.php" method="POST">
+            <table>
+                <tr>
+                    <td>Nom :</td>
+                    <td><input type="text" placeholder="Votre nom" name="Nom"></td>
+                </tr>
+                <tr>
+                    <td>Mot de de passe :</td>
+                    <td><input type="password" placeholder="Votre mot de passe"  name="MotDePasse"></td>
+                </tr>
+                <tr>
+                    <td>Numero de téléphone :</td>
+                    <td><input type="phone" placeholder="N° Téléphone"  name="Telephone"></td>
+                </tr>
+                <tr>
+                    <td>Email :</td>
+                    <td><input type="email" placeholder="Adresse mail" name="Email"></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Je m'inscris"></td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>
+
+
+<!-- https://www.youtube.com/watch?v=qm4Eih_2p-M -->

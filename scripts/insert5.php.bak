@@ -1,0 +1,61 @@
+<?php
+$connection = mysqli_connect("localhost", "root", "willy9105");
+$db = mysqli_select_db($connection, 'test2');
+
+if(isset($_POST['Email']))
+{
+    $Email = $_POST['Email'];
+    $MotDePasse = $_POST['MotDePasse'];
+    $MotDePasseh = password_hash($MotDePasse, PASSWORD_BCRYPT);
+    $MotDePasse = $MotDePasseh;
+
+    $SELECT = "SELECT Email FROM registers WHERE Email = ? LIMIT 1";
+
+    $stmt = $connection->prepare($SELECT);
+    $stmt->bind_param("s", $Email);
+    $stmt->execute();
+    $stmt->bind_result($Email);
+    $stmt->store_result();
+    $rnum = $stmt->num_rows;
+
+
+    if($rnum == 0)
+    {
+
+	$bdd = new PDO('mysql:host=localhost;dbname=test2;charset=utf8','root','willy9105');
+//	$reponse = $connection->query "SELECT MIN(idMachine) FROM register";
+//	$idMachine = $reponse->fetch();
+
+
+
+	$sql1 = 'SELECT idClient FROM registers WHERE idClient = (SELECT MIN(idClient) WHERE registre=0)';
+// WHERE Prestation.EtatMachine=0);
+	// (SELECT MIN(idMachine) FROM Prestation WHERE EtatMachine = 0)';
+	$results = $bdd->query($sql1);
+	$dataMin = $results->fetch(PDO::FETCH_ASSOC);
+	$data2 = $dataMin['idClient'];
+	$query = "UPDATE registers SET Nom = '$_POST[Nom]', MotDePasse='$MotDePasse', Email='$Email', Telephone='$_POST[Telephone]', registre=1
+		  WHERE idClient = '$data2' and registre=0"; // '$idMachine'"; // idMachine = (SELECT MIN(idMachine) FROM register)";
+	$query2= "UPDATE Prestation INNER JOIN registers ON registers.idClient=Prestation.Client SET EtatMachine=1 WHERE registers.registre=1";
+	$query_run = mysqli_query($connection, $query);
+	mysqli_query($connection, $query2);
+        $stmt->close();
+        if($query_run)
+        {
+	    echo '</br>';
+            echo 'Good';
+	    //
+        }
+        else
+        {
+            echo 'Erreur';
+        }
+    }
+   else
+   {
+	echo 'Cette email est déjà utilisé';
+   }
+}
+
+
+?>

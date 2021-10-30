@@ -1,0 +1,115 @@
+<?php 
+
+class esp8266{
+
+ public $link='';
+
+ // il maquait le paramètre idmachine dans ton constructeur
+
+ function __construct($NbFlash,$idMachine){
+  echo "test\n";
+  $this->connect();
+
+  $this->storeInDB($NbFlash,$idMachine);
+ 
+
+  // Les deux requetes sont regoupées en une avec 2 paramètres
+
+
+
+  //$this->storedInDB($idMachine);
+
+  //echo "test";
+
+ }
+
+
+
+ function connect(){
+
+  $this->link = mysqli_connect('localhost','root','willy9105') or die('Cannot connect to the DB');
+
+
+  //pour mes essais j'ai utilisé une base appeleé biomed -> a modifier en fct de ta base
+
+  mysqli_select_db($this->link,'test2') or die('Cannot select the DB');
+
+ }
+
+
+
+ function storeInDB($NbFlash,$idMachine){
+
+  if ($_GET['NbFlash'] != ''){
+
+  //Mise a jour du nb flashs de la machine idmachine
+
+  $query1 = "SELECT NbFlash FROM Prestation WHERE NomMachine=".$idMachine;
+
+  $result = mysqli_query($this->link,$query1) or die('Errant query1: '.$query1);
+
+  $NbFlashResult = mysqli_fetch_assoc($result);
+
+//  echo'<pre>';
+// echo'</pre>';
+//echo '</pre>';
+//echo $NbFlashResult['NomMachine'];
+
+  //printf("%s (%s) \n", $NbFlashResult);
+
+  mysqli_free_result($result);
+
+  $query = "update Prestation set NbFlash=NbFlash+".$NbFlash." WHERE NomMachine=".$idMachine." and EtatMachine=1";
+
+  $result = mysqli_query($this->link,$query) or die('Errant query:  '.$query);
+
+  mysqli_free_result($result);
+
+  $month = date('m');
+  echo $month;
+  echo "\n";
+
+    if($month=="01"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Janvier=date1.Janvier+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="02") {
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Fevrier=date1.Fevrier+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="03"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Mars=date1.Mars+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="04"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Avril=date1.Avril+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="05"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Mai=date1.Mai+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1 AND data1.Client=";}
+  elseif($month=="06"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Juin=date1.Juin+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="07"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Juillet=date1.Juillet+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="08"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Aout=date1.Aout+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="09"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Septembre=date1.Septembre+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="10"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Octobre=date1.Octobre+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="11"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Novembre=date1.Novembre+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+  elseif($month=="12"){
+    $sqlreq="UPDATE date1 INNER JOIN Prestation SET date1.Decembre=date1.Decembre+".$NbFlash." WHERE Prestation.NomMachine=".$idMachine." AND Prestation.EtatMachine=1";}
+
+  $result = mysqli_query($this->link,$sqlreq) or die('Errant query: '.$sqlreq);
+  echo $result;
+}
+
+}
+}
+
+if($_GET['NbFlash'] != ''){
+
+ $esp8266obj=new esp8266($_GET['NbFlash'],$_GET['NomMachine']);
+
+}
+
+
+
+
+
+ I
+?>

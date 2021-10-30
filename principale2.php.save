@@ -1,0 +1,51 @@
+<?php
+session_start();
+if($_SESSION['Email'] !== "")
+{
+
+$host2 = "localhost";
+$host = 'mysql:host=localhost;dbname=test2';
+$dbUser = 'root';
+$dbMdp = 'willy9105';
+$dbName = "test2";
+
+echo "votre email est :";
+
+$user = $_SESSION['Email'];
+echo " $user";
+
+try
+{
+    $options =
+    [
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ];
+
+//    $conn = new mysqli
+//    $db = mysqli_connect($host2, $dbUser, $dbMdp, $dbName) or die ('could not connect to database');
+
+    $PDA = new PDO($host, $dbUser, $dbMdp, $options);
+    $sql = 'SELECT NbFlash FROM register';
+    $sql2 = 'SELECT NbFlash, Nom FROM register WHERE idMachine = 1';
+    $sql3 = 'SELECT * FROM registers WHERE Telephone = 667'; // Afficher toutes la informations de tous les comptes
+   
+    $results = $PDA->query($sql3);
+
+
+    while($data = $results->fetch(PDO::FETCH_ASSOC))
+    {
+	echo'<pre>';
+	print_r($data); // POUR AFFICHER TOUS
+	echo'</pre>';
+	echo $data ['NbFlash'];
+	echo $data ['Nom'];
+    }
+}
+
+catch(PDOException $pe)
+{
+    echo 'ERREUR : '.$pe->getMessage();
+}
+}
+?>

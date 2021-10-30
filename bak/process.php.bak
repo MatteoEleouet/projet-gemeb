@@ -1,0 +1,29 @@
+<?php
+    // Get values pass from from in connexion-test1.php file
+    $Email = $_POST['Email'];
+    $MotDePasse = $_POST['MotDePasse'];
+
+    // to prevent mysql injection
+    $Email = stripcslashes($Email);
+    $MotDePasse = stripcslashes($MotDePasse);
+    $Email = mysql_real_espace_string($Email);
+    $MotDePasse = mysql_real_espace_string($MotDePasse);
+
+    // connect to the server and select database
+    mysql_connect("localhost", "root", "willy9105");
+    mysql_select_db("test");
+
+    // Query the database for user
+    $result = mysql_query("select * from register where Email = '$Email' and MotDePasse = '$MotDePasse'")
+       		 or die("Failed to query database".mysql_error());
+    $row = mysql_fetch_array($result);
+    if ($row['Email'] == $Email AND $row['MotDePasse'] == $MotDePasse)
+    {
+        echo "Connexion réussite ".$row['Email'];
+    }
+    else
+    {
+        echo "Connexion échoué ";
+    }
+
+?>
